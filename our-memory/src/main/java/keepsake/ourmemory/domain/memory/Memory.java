@@ -1,15 +1,6 @@
 package keepsake.ourmemory.domain.memory;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import keepsake.ourmemory.domain.BaseEntity;
 import keepsake.ourmemory.domain.tag.MemoryTag;
 import lombok.AccessLevel;
@@ -21,12 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Memory extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -35,19 +29,19 @@ public class Memory extends BaseEntity {
     @Embedded
     private Title title;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Category category;
 
     private LocalDateTime visitedAt;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Star star;
 
     @Embedded
     private Content content;
 
-    @Enumerated(EnumType.STRING)
-    private MemoryStatus memoryStatus;
+    @Enumerated(STRING)
+    private MemoryStatus memoryStatus = MemoryStatus.PRIVATE;
 
     private boolean deleted = false;
 
@@ -74,6 +68,17 @@ public class Memory extends BaseEntity {
         this.content = content;
         this.memoryStatus = memoryStatus;
         this.coordinate = coordinate;
+    }
+
+    public Memory(
+            Long memberId,
+            Title title,
+            Category category,
+            LocalDateTime visitedAt,
+            Star star,
+            Content content,
+            MemoryStatus memoryStatus) {
+        this(memberId, title, category, visitedAt, star, content, memoryStatus, null);
     }
 
     @Override
