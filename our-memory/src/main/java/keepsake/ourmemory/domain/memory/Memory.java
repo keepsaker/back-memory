@@ -45,7 +45,6 @@ public class Memory extends BaseEntity {
 
     private boolean deleted = false;
 
-    // TODO : 내부 필드값이 모두 null이면 coordinate 객체 자체가 null이 되는 문제
     @Embedded
     private Coordinate coordinate;
 
