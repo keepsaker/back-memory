@@ -52,6 +52,16 @@ class MemoryServiceTest {
     }
 
     @Test
+    void 유효한_별점_범위를_벗어나면_예외가_발생한다() {
+        // given, when
+        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", List.of("image"));
+
+        // then
+        assertThatThrownBy(() -> memoryService.createMemory(request))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     void 추억의_머리말은_50자를_넘을_수_없다() {
         // given, when
         String overLengthTitle = "title".repeat(50);
