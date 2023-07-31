@@ -51,4 +51,28 @@ class MemoryControllerTest {
 
         assertThat(mvcResult.getResponse().getHeader("location")).isEqualTo("/memories/1");
     }
+
+    @Test
+    void 추억의_머리말이_50자를_초과하면_예외() throws Exception {
+        String wrongTitle = "title".repeat(50);
+        MemoryCreateRequest request = new MemoryCreateRequest(wrongTitle, Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/memories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 추억의_내용은_1000자를_초과하면_예외() throws Exception {
+        String wrongContent = "content".repeat(1000);
+        MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), wrongContent, List.of("image"));
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/memories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest());
+    }
 }
