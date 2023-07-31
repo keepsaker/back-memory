@@ -1,4 +1,4 @@
-package keepsake.ourmemory.application;
+package keepsake.ourmemory.api.memory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,6 @@
-package keepsake.ourmemory.api;
+package keepsake.ourmemory.api.memory;
 
-import keepsake.ourmemory.application.MemoryCreateRequest;
-import keepsake.ourmemory.application.MemoryService;
+import keepsake.ourmemory.application.memory.MemoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,5 +1,6 @@
-package keepsake.ourmemory.application;
+package keepsake.ourmemory.application.memory;
 
+import keepsake.ourmemory.api.memory.MemoryCreateRequest;
 import keepsake.ourmemory.domain.memory.*;
 import keepsake.ourmemory.repository.MemoryRepository;
 import lombok.RequiredArgsConstructor;

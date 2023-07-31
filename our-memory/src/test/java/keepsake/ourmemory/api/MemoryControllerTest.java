@@ -1,8 +1,9 @@
 package keepsake.ourmemory.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import keepsake.ourmemory.application.MemoryCreateRequest;
-import keepsake.ourmemory.application.MemoryService;
+import keepsake.ourmemory.api.memory.MemoryController;
+import keepsake.ourmemory.api.memory.MemoryCreateRequest;
+import keepsake.ourmemory.application.memory.MemoryService;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Star;
 import org.junit.jupiter.api.Test;

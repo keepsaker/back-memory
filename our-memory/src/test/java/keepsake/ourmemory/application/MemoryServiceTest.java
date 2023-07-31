@@ -1,5 +1,7 @@
 package keepsake.ourmemory.application;
 
+import keepsake.ourmemory.api.memory.MemoryCreateRequest;
+import keepsake.ourmemory.application.memory.MemoryService;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
