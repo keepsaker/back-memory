@@ -58,7 +58,6 @@ public class Memory extends BaseEntity {
                   LocalDateTime visitedAt,
                   Star star,
                   Content content,
-                  MemoryStatus memoryStatus,
                   Coordinate coordinate) {
         this.memberId = memberId;
         this.title = title;
@@ -66,7 +65,6 @@ public class Memory extends BaseEntity {
         this.visitedAt = visitedAt;
         this.star = star;
         this.content = content;
-        this.memoryStatus = memoryStatus;
         this.coordinate = coordinate;
     }
 
@@ -76,9 +74,8 @@ public class Memory extends BaseEntity {
             Category category,
             LocalDateTime visitedAt,
             Star star,
-            Content content,
-            MemoryStatus memoryStatus) {
-        this(memberId, title, category, visitedAt, star, content, memoryStatus, null);
+            Content content) {
+        this(memberId, title, category, visitedAt, star, content, null);
     }
 
     @Override
