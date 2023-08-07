@@ -36,6 +36,14 @@ public class Tag extends BaseEntity {
         this.tagColor = tagColor;
     }
 
+    public String getTagNameValue() {
+        return tagName.getName();
+    }
+
+    public String getTagColorValue() {
+        return tagColor.getColor();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

@@ -1,5 +1,16 @@
 package keepsake.ourmemory.domain.memory;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 import keepsake.ourmemory.domain.BaseEntity;
 import keepsake.ourmemory.domain.tag.MemoryTag;
@@ -48,7 +59,8 @@ public class Memory extends BaseEntity {
     @Embedded
     private Coordinate coordinate;
 
-    @OneToMany(mappedBy = "memory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "memory_id", nullable = false, updatable = false)
     private List<MemoryTag> memoryTags = new ArrayList<>();
 
     public Memory(Long memberId,

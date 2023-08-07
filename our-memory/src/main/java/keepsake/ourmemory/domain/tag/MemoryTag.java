@@ -1,6 +1,5 @@
 package keepsake.ourmemory.domain.tag;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,15 +24,11 @@ public class MemoryTag extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memory_id")
-    private Memory memory;
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
-    @Column(nullable = false)
-    private Long tagId;
-
-    public MemoryTag(Memory memory, Long tagId) {
-        this.memory = memory;
-        this.tagId = tagId;
+    public MemoryTag(Tag tag) {
+        this.tag = tag;
     }
 
     @Override
@@ -57,8 +52,7 @@ public class MemoryTag extends BaseEntity {
     public String toString() {
         return "MemoryTag{" +
                 "id=" + id +
-                ", memory=" + memory +
-                ", tagId=" + tagId +
+                ", tag=" + tag +
                 '}';
     }
 }

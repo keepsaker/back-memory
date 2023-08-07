@@ -1,11 +1,13 @@
 package keepsake.ourmemory.domain.memory;
 
+import lombok.Getter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public enum Category {
     RESTAURANT("restaurant"), CAFE("cafe"), HOBBY("hobby");
 
