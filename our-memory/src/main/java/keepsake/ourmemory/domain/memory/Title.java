@@ -13,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Title {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String title;
 
     public Title(String title) {
