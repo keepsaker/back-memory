@@ -9,8 +9,15 @@ class CategoryTest {
 
     @Test
     void 카테고리를_변환한다() {
-        Category cafe = Category.from("cafe");
-        assertThat(cafe).isEqualTo(Category.CAFE);
+        // given
+        Category actual = Category.CAFE;
+        String categoryName = actual.getCategoryName();
+
+        // when
+        Category expected = Category.from(categoryName);
+
+        // then
+        assertThat(actual).isSameAs(expected);
     }
 
     @Test
