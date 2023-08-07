@@ -1,9 +1,9 @@
 package keepsake.ourmemory.application.memory;
 
 import keepsake.ourmemory.api.memory.MemoryCreateRequest;
+import keepsake.ourmemory.application.memory.dto.CategoryDto;
 import keepsake.ourmemory.domain.memory.*;
 import keepsake.ourmemory.repository.MemoryRepository;
-import keepsake.ourmemory.application.memory.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +29,10 @@ public class MemoryService {
 
         return memory.getId();
     }
-  
+
     public List<CategoryDto> findCategories() {
         return Arrays.stream(Category.values())
-                .map(category -> new CategoryDto(category.getName()))
+                .map(category -> new CategoryDto(category.getCategoryName()))
                 .toList();
     }
 }

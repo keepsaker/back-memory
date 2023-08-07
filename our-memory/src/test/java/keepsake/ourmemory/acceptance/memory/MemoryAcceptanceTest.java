@@ -31,7 +31,7 @@ public class MemoryAcceptanceTest {
     void 카테고리_목록을_조회한다() {
         // given
         List<String> expected = Arrays.stream(Category.values())
-                .map(Category::getName)
+                .map(Category::getCategoryName)
                 .toList();
 
         // when
