@@ -59,7 +59,7 @@ public class Memory extends BaseEntity {
     @Embedded
     private Coordinate coordinate;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "memory_id", nullable = false, updatable = false)
     private List<MemoryTag> memoryTags = new ArrayList<>();
 
