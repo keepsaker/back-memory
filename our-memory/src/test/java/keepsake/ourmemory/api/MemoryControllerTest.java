@@ -40,7 +40,7 @@ class MemoryControllerTest {
         MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(memoryService.createMemory(any()))
+        given(memoryService.createMemory(any(), any()))
                 .willReturn(1L);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/memories")

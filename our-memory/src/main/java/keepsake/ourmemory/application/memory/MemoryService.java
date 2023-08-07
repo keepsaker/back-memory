@@ -23,12 +23,12 @@ import java.util.List;
 public class MemoryService {
     private final MemoryRepository memoryRepository;
 
-    public Long createMemory(MemoryCreateRequest request) {
+    public Long createMemory(Long memberId, MemoryCreateRequest request) {
         Title title = new Title(request.getTitle());
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());
         Content content = new Content(request.getContent());
-        Memory memory = new Memory(1L, title, category, request.getVisitedAt(), star, content);
+        Memory memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content);
 
         memoryRepository.save(memory);
 

@@ -15,17 +15,18 @@ public record MemoryResponse(String title,
         return new MemoryResponse(
                 memory.getTitleValue(),
                 memory.getCategoryValue(),
-                memory.getMemoryTags()
-                        .stream()
-                        .map(TagResponse::from)
-                        .toList(),
+                getTagResponses(memory),
                 memory.getVisitedAt(),
                 memory.getStarValue(),
                 // TODO : image 추가
-                new LocationResponse(
-                        memory.getLatitudeValue(),
-                        memory.getLongitudeValue()
-                )
+                LocationResponse.of(memory.getLatitudeValue(), memory.getLongitudeValue())
         );
+    }
+
+    private static List<TagResponse> getTagResponses(final Memory memory) {
+        return memory.getMemoryTags()
+                .stream()
+                .map(TagResponse::from)
+                .toList();
     }
 }

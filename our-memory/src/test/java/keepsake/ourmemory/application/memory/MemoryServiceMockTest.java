@@ -1,11 +1,11 @@
-package keepsake.ourmemory.application;
+package keepsake.ourmemory.application.memory;
 
-import keepsake.ourmemory.application.repository.MemoryRepository;
-import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.application.memory.MemoryService;
+import keepsake.ourmemory.application.repository.MemoryRepository;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
+import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class MemoryServiceTest {
+class MemoryServiceMockTest {
 
     @Mock
     private MemoryRepository memoryRepository;
@@ -37,7 +37,7 @@ class MemoryServiceTest {
         MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
 
         // then
-        assertDoesNotThrow(() -> memoryService.createMemory(request));
+        assertDoesNotThrow(() -> memoryService.createMemory(1L, request));
     }
 
     @Test
@@ -46,7 +46,7 @@ class MemoryServiceTest {
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
 
         // then
-        assertThatThrownBy(() -> memoryService.createMemory(request))
+        assertThatThrownBy(() -> memoryService.createMemory(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 카테고리 입니다.");
     }
@@ -57,7 +57,7 @@ class MemoryServiceTest {
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", List.of("image"));
 
         // then
-        assertThatThrownBy(() -> memoryService.createMemory(request))
+        assertThatThrownBy(() -> memoryService.createMemory(1L, request))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -68,7 +68,7 @@ class MemoryServiceTest {
         MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
 
         // then
-        assertThatThrownBy(() -> memoryService.createMemory(request))
+        assertThatThrownBy(() -> memoryService.createMemory(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("제목은 최대 50자 입니다.");
     }

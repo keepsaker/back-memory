@@ -22,7 +22,7 @@ public class MemoryController {
 
     @PostMapping
     public ResponseEntity<Void> createMemory(@Valid @RequestBody MemoryCreateRequest request) {
-        Long memoryId = memoryService.createMemory(request);
+        Long memoryId = memoryService.createMemory(1L, request);
         return ResponseEntity.created(URI.create("/memories/" + memoryId)).build();
     }
 
