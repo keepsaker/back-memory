@@ -1,4 +1,4 @@
-package keepsake.ourmemory.api.memory;
+package keepsake.ourmemory.ui.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

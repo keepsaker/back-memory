@@ -1,17 +1,15 @@
 package keepsake.ourmemory.domain.memory;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.*;
 import keepsake.ourmemory.domain.BaseEntity;
 import keepsake.ourmemory.domain.tag.MemoryTag;
 import lombok.AccessLevel;
@@ -99,6 +97,26 @@ public class Memory extends BaseEntity {
         }
         final Memory memory = (Memory) other;
         return Objects.equals(id, memory.id);
+    }
+
+    public String getTitleValue() {
+        return title.getTitle();
+    }
+
+    public String getCategoryValue() {
+        return category.getCategoryName();
+    }
+
+    public int getStarValue() {
+        return star.getValue();
+    }
+
+    public String getLatitudeValue() {
+        return coordinate.getLatitude();
+    }
+
+    public String getLongitudeValue() {
+        return coordinate.getLongitude();
     }
 
     @Override

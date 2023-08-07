@@ -1,4 +1,4 @@
-package keepsake.ourmemory.api.memory.response;
+package keepsake.ourmemory.ui.dto.response;
 
 import java.util.List;
 

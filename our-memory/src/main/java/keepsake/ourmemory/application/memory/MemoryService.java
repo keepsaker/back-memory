@@ -1,9 +1,15 @@
 package keepsake.ourmemory.application.memory;
 
-import keepsake.ourmemory.api.memory.MemoryCreateRequest;
 import keepsake.ourmemory.application.memory.dto.CategoryDto;
-import keepsake.ourmemory.domain.memory.*;
-import keepsake.ourmemory.repository.MemoryRepository;
+import keepsake.ourmemory.application.repository.MemoryRepository;
+import keepsake.ourmemory.domain.memory.Category;
+import keepsake.ourmemory.domain.memory.Content;
+import keepsake.ourmemory.domain.memory.Memory;
+import keepsake.ourmemory.domain.memory.Star;
+import keepsake.ourmemory.domain.memory.Title;
+import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
+import keepsake.ourmemory.ui.dto.response.MemoriesResponse;
+import keepsake.ourmemory.ui.dto.response.MemoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +21,6 @@ import java.util.List;
 @Transactional
 @Service
 public class MemoryService {
-
     private final MemoryRepository memoryRepository;
 
     public Long createMemory(MemoryCreateRequest request) {
@@ -34,5 +39,16 @@ public class MemoryService {
         return Arrays.stream(Category.values())
                 .map(category -> new CategoryDto(category.getCategoryName()))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public MemoriesResponse getMemories(Long memberId) {
+//        List<Memory> memories = memoryRepository.findAllByMemberId(memberId);
+        List<Memory> memories = memoryRepository.findAll();
+        List<MemoryResponse> responses = memories.stream()
+                .map(MemoryResponse::from)
+                .toList();
+
+        return new MemoriesResponse(responses);
     }
 }

@@ -1,7 +1,7 @@
 package keepsake.ourmemory.acceptance.memory;
 
 import io.restassured.RestAssured;
-import keepsake.ourmemory.api.memory.response.CategoryResponse;
+import keepsake.ourmemory.ui.dto.response.CategoryResponse;
 import keepsake.ourmemory.domain.memory.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

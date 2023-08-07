@@ -1,8 +1,8 @@
 package keepsake.ourmemory.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import keepsake.ourmemory.api.memory.MemoryController;
-import keepsake.ourmemory.api.memory.MemoryCreateRequest;
+import keepsake.ourmemory.ui.MemoryController;
+import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.application.memory.MemoryService;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Star;
