@@ -74,7 +74,7 @@ public class Memory extends BaseEntity {
             LocalDateTime visitedAt,
             Star star,
             Content content) {
-        this(memberId, title, category, visitedAt, star, content, null);
+        this(memberId, title, category, visitedAt, star, content, new Coordinate());
     }
 
     @Override
