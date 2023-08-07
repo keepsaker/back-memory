@@ -6,7 +6,7 @@ public class CategoryResponse {
 
     private String name;
 
-    public CategoryResponse() {
+    protected CategoryResponse() {
     }
 
     public CategoryResponse(String name) {

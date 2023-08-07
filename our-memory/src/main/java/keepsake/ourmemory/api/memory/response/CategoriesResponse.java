@@ -6,7 +6,7 @@ public class CategoriesResponse {
 
     private List<CategoryResponse> categories;
 
-    public CategoriesResponse() {
+    protected CategoriesResponse() {
     }
 
     public CategoriesResponse(List<CategoryResponse> categories) {
