@@ -12,10 +12,14 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Title {
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 50)
     private String title;
 
     public Title(String title) {
+        if (title.length() > 50) {
+            throw new IllegalArgumentException("제목은 최대 50자 입니다.");
+        }
         this.title = title;
     }
 
