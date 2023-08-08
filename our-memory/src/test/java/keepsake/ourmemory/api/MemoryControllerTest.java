@@ -1,8 +1,8 @@
 package keepsake.ourmemory.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import keepsake.ourmemory.api.memory.MemoryController;
-import keepsake.ourmemory.api.memory.MemoryCreateRequest;
+import keepsake.ourmemory.ui.MemoryController;
+import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.application.memory.MemoryService;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Star;
@@ -40,7 +40,7 @@ class MemoryControllerTest {
         MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(memoryService.createMemory(any()))
+        given(memoryService.createMemory(any(), any()))
                 .willReturn(1L);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/memories")
