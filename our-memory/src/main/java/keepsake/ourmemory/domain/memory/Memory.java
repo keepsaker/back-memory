@@ -5,12 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import keepsake.ourmemory.domain.BaseEntity;
+import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.tag.MemoryTag;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,12 +52,16 @@ public class Memory extends BaseEntity {
     @Enumerated(STRING)
     private MemoryStatus memoryStatus = MemoryStatus.PRIVATE;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "memory_id", nullable = false, updatable = false)
+    List<Image> images = new ArrayList<>();
+
     private boolean deleted = false;
 
     @Embedded
     private Coordinate coordinate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "memory_id", nullable = false, updatable = false)
     private List<MemoryTag> memoryTags = new ArrayList<>();
 
@@ -85,6 +89,18 @@ public class Memory extends BaseEntity {
             Star star,
             Content content) {
         this(memberId, title, category, visitedAt, star, content, new Coordinate());
+    }
+
+    public Memory(
+            Long memberId,
+            Title title,
+            Category category,
+            LocalDateTime visitedAt,
+            Star star,
+            Content content,
+            List<Image> images) {
+        this(memberId, title, category, visitedAt, star, content, new Coordinate());
+        this.images = images;
     }
 
     @Override

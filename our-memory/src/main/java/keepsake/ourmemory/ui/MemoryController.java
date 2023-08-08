@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -21,7 +22,7 @@ public class MemoryController {
     private final MemoryService memoryService;
 
     @PostMapping
-    public ResponseEntity<Void> createMemory(@Valid @RequestBody MemoryCreateRequest request) {
+    public ResponseEntity<Void> createMemory(@Valid @RequestBody MemoryCreateRequest request) throws IOException {
         Long memoryId = memoryService.createMemory(1L, request);
         return ResponseEntity.created(URI.create("/memories/" + memoryId)).build();
     }

@@ -1,6 +1,5 @@
 package keepsake.ourmemory.domain.image;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +21,8 @@ public class Image extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long memoryId;
+  /*  @Column(nullable = false)
+    private Long memoryId;*/
 
     private boolean thumbnail = false;
 
@@ -33,14 +32,12 @@ public class Image extends BaseEntity {
     @Embedded
     private ImageName imageName;
 
-    public Image(Long memoryId, ImagePath imagePath, ImageName imageName) {
-        this.memoryId = memoryId;
+    public Image(ImagePath imagePath, ImageName imageName) {
         this.imagePath = imagePath;
         this.imageName = imageName;
     }
 
-    public Image(Long memoryId, boolean thumbnail, ImagePath imagePath, ImageName imageName) {
-        this.memoryId = memoryId;
+    public Image(boolean thumbnail, ImagePath imagePath, ImageName imageName) {
         this.thumbnail = thumbnail;
         this.imagePath = imagePath;
         this.imageName = imageName;
@@ -67,7 +64,6 @@ public class Image extends BaseEntity {
     public String toString() {
         return "Image{" +
                 "id=" + id +
-                ", memoryId=" + memoryId +
                 ", imagePath=" + imagePath +
                 ", imageName=" + imageName +
                 '}';

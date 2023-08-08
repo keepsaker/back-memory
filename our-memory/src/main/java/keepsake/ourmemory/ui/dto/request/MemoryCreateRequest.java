@@ -3,6 +3,7 @@ package keepsake.ourmemory.ui.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,5 +25,5 @@ public class MemoryCreateRequest {
     @Length(max = 1000)
     private String content;
 
-    private List<String> images;
+    private List<MultipartFile> images;
 }
