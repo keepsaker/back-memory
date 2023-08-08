@@ -1,8 +1,5 @@
 package keepsake.ourmemory.domain.image;
 
-import keepsake.ourmemory.application.image.ImageService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,25 +13,29 @@ import java.util.Objects;
 
 @Component
 public class ImageHandler {
-    private static final String IMAGE_CONTROLLER_URL_PATH = "http://13.124.207.219:8080/images/";
+    private static final String IMAGE_CONTROLLER_URL_PATH = "http://13.124.207.219/images/";
+    private static final String IMAGE_DIRECTORY_PATH = "/keepsaker/images/";
+    public static final int THUMBNAIL_INDEX = 0;
 
     public List<Image> upload(List<MultipartFile> multipartFiles) throws IOException {
         List<Image> result = new ArrayList<>();
-
         if (Objects.isNull(multipartFiles) || multipartFiles.isEmpty()) {
-            return null;
+            return result;
         }
-
-        for (int i = 0; i < multipartFiles.size(); i++) {
-            final MultipartFile multipartImage = multipartFiles.get(i);
+        File directory = new File(IMAGE_DIRECTORY_PATH);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        for (int index = 0; index < multipartFiles.size(); index++) {
+            final MultipartFile multipartImage = multipartFiles.get(index);
             String imageName = getCurrentTime() + "_" + multipartImage.getOriginalFilename();
-            multipartImage.transferTo(new File(imageName));
-            String imagePath = IMAGE_CONTROLLER_URL_PATH + imageName;
+            multipartImage.transferTo(new File(IMAGE_DIRECTORY_PATH + imageName));
+
             Image resultImage;
-            if (i == 0) {
-                resultImage = new Image(true, new ImagePath(imagePath), new ImageName(imageName));
+            if (index == THUMBNAIL_INDEX) {
+                resultImage = new Image(true, new ImagePath(IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
             } else {
-                resultImage = new Image(new ImagePath(imagePath), new ImageName(imageName));
+                resultImage = new Image(new ImagePath(IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
             }
             result.add(resultImage);
         }
@@ -43,6 +44,6 @@ public class ImageHandler {
 
     private String getCurrentTime() {
         LocalDateTime now = LocalDateTime.now();
-        return now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm"));
+        return now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
     }
 }
