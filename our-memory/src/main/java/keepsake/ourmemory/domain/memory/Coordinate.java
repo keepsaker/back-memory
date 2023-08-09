@@ -14,9 +14,17 @@ public class Coordinate {
     private String latitude;
     private String longitude;
 
-    public Coordinate(String latitude, String longitude) {
+    private Coordinate(String latitude, String longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public static Coordinate of(String latitude, String longitude) {
+        return new Coordinate(latitude, longitude);
+    }
+
+    public static Coordinate empty() {
+        return new Coordinate("", "");
     }
 
     @Override

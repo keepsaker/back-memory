@@ -1,11 +1,15 @@
 package keepsake.ourmemory.application.memory;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.exif.GpsDirectory;
 import keepsake.ourmemory.application.memory.dto.CategoryDto;
 import keepsake.ourmemory.application.repository.MemoryRepository;
 import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.image.ImageHandler;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Content;
+import keepsake.ourmemory.domain.memory.Coordinate;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
 import keepsake.ourmemory.domain.memory.Title;
@@ -15,10 +19,13 @@ import keepsake.ourmemory.ui.dto.response.MemoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -29,18 +36,37 @@ public class MemoryService {
 
     public Long createMemory(Long memberId, MemoryCreateRequest request) throws IOException {
         List<Image> images = imageHandler.upload(request.getImages());
+        Coordinate coordinate = extractCoordinate(request.getImages().get(0));
         Title title = new Title(request.getTitle());
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());
         Content content = new Content(request.getContent());
-        Memory memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images);
-
+        Memory memory;
+        if (images == null || images.isEmpty()) {
+            memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images);
+        } else {
+            memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images, coordinate);
+        }
         memoryRepository.save(memory);
-
         return memory.getId();
     }
 
-    @Transactional(readOnly = true)
+    private Coordinate extractCoordinate(final MultipartFile image) throws IOException {
+        File file = new File(Objects.requireNonNull(image.getOriginalFilename()));
+        image.transferTo(file);
+        try {
+            GpsDirectory gpsDirectory = ImageMetadataReader.readMetadata(file).getFirstDirectoryOfType(GpsDirectory.class);
+            if (gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE)) {
+                String latitude = String.valueOf(gpsDirectory.getGeoLocation().getLatitude());
+                String longitude = String.valueOf(gpsDirectory.getGeoLocation().getLongitude());
+                return Coordinate.of(latitude, longitude);
+            }
+        } catch (ImageProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return Coordinate.empty();
+    }
+
     public List<CategoryDto> findCategories() {
         return Arrays.stream(Category.values())
                 .map(category -> new CategoryDto(category.getCategoryName()))

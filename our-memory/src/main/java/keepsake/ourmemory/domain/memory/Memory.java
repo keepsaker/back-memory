@@ -71,6 +71,7 @@ public class Memory extends BaseEntity {
                   LocalDateTime visitedAt,
                   Star star,
                   Content content,
+                  List<Image> images,
                   Coordinate coordinate) {
         this.memberId = memberId;
         this.title = title;
@@ -78,6 +79,7 @@ public class Memory extends BaseEntity {
         this.visitedAt = visitedAt;
         this.star = star;
         this.content = content;
+        this.images = images;
         this.coordinate = coordinate;
     }
 
@@ -88,7 +90,7 @@ public class Memory extends BaseEntity {
             LocalDateTime visitedAt,
             Star star,
             Content content) {
-        this(memberId, title, category, visitedAt, star, content, new Coordinate());
+        this(memberId, title, category, visitedAt, star, content, null, new Coordinate());
     }
 
     public Memory(
@@ -99,20 +101,7 @@ public class Memory extends BaseEntity {
             Star star,
             Content content,
             List<Image> images) {
-        this(memberId, title, category, visitedAt, star, content, new Coordinate());
-        this.images = images;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-        final Memory memory = (Memory) other;
-        return Objects.equals(id, memory.id);
+        this(memberId, title, category, visitedAt, star, content, images, new Coordinate());
     }
 
     public String getTitleValue() {
@@ -133,6 +122,18 @@ public class Memory extends BaseEntity {
 
     public String getLongitudeValue() {
         return coordinate.getLongitude();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final Memory memory = (Memory) other;
+        return Objects.equals(id, memory.id);
     }
 
     @Override
