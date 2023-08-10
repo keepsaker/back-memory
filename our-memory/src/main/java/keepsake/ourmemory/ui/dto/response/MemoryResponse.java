@@ -4,6 +4,7 @@ import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.memory.Memory;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public record MemoryResponse(String title,
@@ -33,9 +34,12 @@ public record MemoryResponse(String title,
     }
 
     private static List<String> extractImages(Memory memory) {
+        if (memory.getImages() == null || memory.getImages().isEmpty()) {
+            return Collections.emptyList();
+        }
         return memory.getImages()
                 .stream()
-                .map(Image::getUri)
+                .map(Image::getOriginalUri)
                 .toList();
     }
 }

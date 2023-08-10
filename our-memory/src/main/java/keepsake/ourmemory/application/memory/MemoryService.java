@@ -34,15 +34,15 @@ public class MemoryService {
 
     public Long createMemory(Long memberId, MemoryCreateRequest request) throws IOException {
         List<Image> images = imageHandler.upload(request.getImages());
-        Coordinate coordinate = extractCoordinate(images.get(0));
         Title title = new Title(request.getTitle());
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());
         Content content = new Content(request.getContent());
         Memory memory;
-        if (images == null || images.isEmpty()) {
+        if (images.isEmpty()) {
             memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images);
         } else {
+            Coordinate coordinate = extractCoordinate(images.get(0));
             memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images, coordinate);
         }
         memoryRepository.save(memory);
@@ -50,7 +50,7 @@ public class MemoryService {
     }
 
     private Coordinate extractCoordinate(final Image image) throws IOException {
-        File file = new File(image.getPath());
+        File file = new File(image.getOriginalPath());
         try {
             GpsDirectory gpsDirectory = ImageMetadataReader.readMetadata(file).getFirstDirectoryOfType(GpsDirectory.class);
             if (gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE)) {

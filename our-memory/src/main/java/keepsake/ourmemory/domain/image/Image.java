@@ -16,42 +16,41 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
-    public static final String IMAGE_DIRECTORY_PATH = "C:/Users/bs860/IdeaProjects/woo/project/back-memory/our-memory/images/";
-    public static final String IMAGE_CONTROLLER_URL_PATH = "localhost:8080/images/";
+
     public static final int THUMBNAIL_INDEX = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-  /*  @Column(nullable = false)
-    private Long memoryId;*/
-
     private boolean thumbnail = false;
 
     @Embedded
-    private ImagePath imagePath;
+    private ImageRootUri imageRootUri;
+
+    @Embedded
+    private ImageRootPath imageRootPath;
 
     @Embedded
     private ImageName imageName;
 
-    public Image(ImagePath imagePath, ImageName imageName) {
-        this.imagePath = imagePath;
-        this.imageName = imageName;
+    public Image(ImageRootUri imageRootUri, ImageRootPath imageRootPath, ImageName imageName) {
+        this(false, imageRootUri, imageRootPath, imageName);
     }
 
-    public Image(boolean thumbnail, ImagePath imagePath, ImageName imageName) {
+    public Image(boolean thumbnail, ImageRootUri imageRootUri, ImageRootPath imageRootPath, ImageName imageName) {
         this.thumbnail = thumbnail;
-        this.imagePath = imagePath;
+        this.imageRootUri = imageRootUri;
+        this.imageRootPath = imageRootPath;
         this.imageName = imageName;
     }
 
-    public String getUri() {
-        return imagePath.getImagePath() + imageName.getImageName();
+    public String getOriginalUri() {
+        return imageRootUri.getImageUri() + imageName.getImageName();
     }
 
-    public String getPath() {
-        return IMAGE_DIRECTORY_PATH + imageName.getImageName();
+    public String getOriginalPath() {
+        return imageRootPath.getImagePath() + imageName.getImageName();
     }
 
     @Override
@@ -75,7 +74,9 @@ public class Image extends BaseEntity {
     public String toString() {
         return "Image{" +
                 "id=" + id +
-                ", imagePath=" + imagePath +
+                ", thumbnail=" + thumbnail +
+                ", imageUri=" + imageRootUri +
+                ", imagePath=" + imageRootPath +
                 ", imageName=" + imageName +
                 '}';
     }

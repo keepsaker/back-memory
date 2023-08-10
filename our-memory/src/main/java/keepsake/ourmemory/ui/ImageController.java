@@ -1,6 +1,6 @@
 package keepsake.ourmemory.ui;
 
-import keepsake.ourmemory.domain.image.Image;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -16,12 +16,13 @@ import java.nio.file.Paths;
 
 @RestController
 public class ImageController {
+    @Value("${image.directory-path}")
+    public String imageRootPath;
 
     @GetMapping("/images/{imageName:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         try {
-            String path = "./images/";
-            Path filePath = Paths.get(Image.IMAGE_DIRECTORY_PATH + imageName);
+            Path filePath = Paths.get(imageRootPath + imageName);
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 String contentType = "image/jpeg"; // 이미지의 타입을 알맞게 설정해 주세요.

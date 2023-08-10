@@ -4,7 +4,7 @@ import keepsake.ourmemory.application.repository.MemoryRepository;
 import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.image.ImageHandler;
 import keepsake.ourmemory.domain.image.ImageName;
-import keepsake.ourmemory.domain.image.ImagePath;
+import keepsake.ourmemory.domain.image.ImageRootPath;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
@@ -59,7 +59,7 @@ class MemoryServiceMockTest {
     void 존재하지_않는_카테고리_추억은_예외가_발생한다() throws IOException {
         // given, when
         given(imageHandler.upload(any()))
-                .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
@@ -71,7 +71,7 @@ class MemoryServiceMockTest {
     void 유효한_별점_범위를_벗어나면_예외가_발생한다() throws IOException {
         // given, when
         given(imageHandler.upload(any()))
-                .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", Collections.emptyList());
 
         // then
@@ -83,7 +83,7 @@ class MemoryServiceMockTest {
     void 추억의_머리말은_50자를_넘을_수_없다() throws IOException {
         // given, when
         given(imageHandler.upload(any()))
-                .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         String overLengthTitle = "title".repeat(50);
         MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
 

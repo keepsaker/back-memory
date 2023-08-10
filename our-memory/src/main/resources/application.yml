@@ -2,8 +2,6 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
-  profiles:
-    active: dev
   h2:
     console:
       enabled: true
@@ -20,3 +18,14 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 20MB
+image:
+  directory-path: /Users/jhs/jhs/woo/project/keepsaker/our-memory/src/main/java/keepsake/ourmemory/images/
+  web-uri: localhost:8080/images/
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+image:
+  directory-path: /home/ubuntu/images/
+  web-uri: 43.201.45.102/images/

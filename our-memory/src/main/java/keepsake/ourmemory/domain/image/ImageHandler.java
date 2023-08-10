@@ -1,5 +1,6 @@
 package keepsake.ourmemory.domain.image;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,30 +9,39 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 @Component
 public class ImageHandler {
+    @Value("${image.directory-path}")
+    public String imageRootPath;
+
+    @Value("${image.web-uri}")
+    public String imageRootUri;
+
     public List<Image> upload(List<MultipartFile> multipartFiles) throws IOException {
-        List<Image> result = new ArrayList<>();
         if (Objects.isNull(multipartFiles) || multipartFiles.isEmpty()) {
-            return result;
+            return Collections.emptyList();
         }
-        File directory = new File(Image.IMAGE_DIRECTORY_PATH);
+        List<Image> result = new ArrayList<>();
+        System.out.println(imageRootPath);
+
+        File directory = new File(imageRootPath);
         if (!directory.exists()) {
             directory.mkdirs();
         }
         for (int index = 0; index < multipartFiles.size(); index++) {
             final MultipartFile multipartImage = multipartFiles.get(index);
             String imageName = getCurrentTime() + "_" + multipartImage.getOriginalFilename();
-            multipartImage.transferTo(new File(Image.IMAGE_DIRECTORY_PATH + imageName));
+            multipartImage.transferTo(new File(imageRootPath + imageName));
 
             Image resultImage;
             if (index == Image.THUMBNAIL_INDEX) {
-                resultImage = new Image(true, new ImagePath(Image.IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
+                resultImage = new Image(true, new ImageRootUri(imageRootUri), new ImageRootPath(imageRootPath), new ImageName(imageName));
             } else {
-                resultImage = new Image(new ImagePath(Image.IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
+                resultImage = new Image(new ImageRootUri(imageRootUri), new ImageRootPath(imageRootPath), new ImageName(imageName));
             }
             result.add(resultImage);
         }
