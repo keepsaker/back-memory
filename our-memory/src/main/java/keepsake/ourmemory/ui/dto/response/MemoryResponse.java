@@ -1,5 +1,6 @@
 package keepsake.ourmemory.ui.dto.response;
 
+import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.memory.Memory;
 
 import java.time.LocalDateTime;
@@ -10,23 +11,31 @@ public record MemoryResponse(String title,
                              List<TagResponse> tags,
                              LocalDateTime visitedAt,
                              int star,
+                             List<String> images,
                              LocationResponse location) {
-    public static MemoryResponse from(final Memory memory) {
+    public static MemoryResponse from(Memory memory) {
         return new MemoryResponse(
                 memory.getTitleValue(),
                 memory.getCategoryValue(),
                 getTagResponses(memory),
                 memory.getVisitedAt(),
                 memory.getStarValue(),
-                // TODO : image 추가
+                extractImages(memory),
                 LocationResponse.of(memory.getLatitudeValue(), memory.getLongitudeValue())
         );
     }
 
-    private static List<TagResponse> getTagResponses(final Memory memory) {
+    private static List<TagResponse> getTagResponses(Memory memory) {
         return memory.getMemoryTags()
                 .stream()
                 .map(TagResponse::from)
+                .toList();
+    }
+
+    private static List<String> extractImages(Memory memory) {
+        return memory.getImages()
+                .stream()
+                .map(Image::getUri)
                 .toList();
     }
 }

@@ -16,6 +16,9 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
+    public static final String IMAGE_DIRECTORY_PATH = "C:/Users/bs860/IdeaProjects/woo/project/back-memory/our-memory/images/";
+    public static final String IMAGE_CONTROLLER_URL_PATH = "localhost:8080/images/";
+    public static final int THUMBNAIL_INDEX = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +44,14 @@ public class Image extends BaseEntity {
         this.thumbnail = thumbnail;
         this.imagePath = imagePath;
         this.imageName = imageName;
+    }
+
+    public String getUri() {
+        return imagePath.getImagePath() + imageName.getImageName();
+    }
+
+    public String getPath() {
+        return IMAGE_DIRECTORY_PATH + imageName.getImageName();
     }
 
     @Override

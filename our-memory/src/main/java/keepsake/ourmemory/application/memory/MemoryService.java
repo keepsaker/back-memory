@@ -19,13 +19,11 @@ import keepsake.ourmemory.ui.dto.response.MemoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -36,7 +34,7 @@ public class MemoryService {
 
     public Long createMemory(Long memberId, MemoryCreateRequest request) throws IOException {
         List<Image> images = imageHandler.upload(request.getImages());
-        Coordinate coordinate = extractCoordinate(request.getImages().get(0));
+        Coordinate coordinate = extractCoordinate(images.get(0));
         Title title = new Title(request.getTitle());
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());
@@ -51,9 +49,8 @@ public class MemoryService {
         return memory.getId();
     }
 
-    private Coordinate extractCoordinate(final MultipartFile image) throws IOException {
-        File file = new File(Objects.requireNonNull(image.getOriginalFilename()));
-        image.transferTo(file);
+    private Coordinate extractCoordinate(final Image image) throws IOException {
+        File file = new File(image.getPath());
         try {
             GpsDirectory gpsDirectory = ImageMetadataReader.readMetadata(file).getFirstDirectoryOfType(GpsDirectory.class);
             if (gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE)) {

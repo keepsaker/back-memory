@@ -13,29 +13,25 @@ import java.util.Objects;
 
 @Component
 public class ImageHandler {
-    private static final String IMAGE_CONTROLLER_URL_PATH = "http://13.124.207.219/images/";
-    private static final String IMAGE_DIRECTORY_PATH = "/keepsaker/images/";
-    public static final int THUMBNAIL_INDEX = 0;
-
     public List<Image> upload(List<MultipartFile> multipartFiles) throws IOException {
         List<Image> result = new ArrayList<>();
         if (Objects.isNull(multipartFiles) || multipartFiles.isEmpty()) {
             return result;
         }
-        File directory = new File(IMAGE_DIRECTORY_PATH);
+        File directory = new File(Image.IMAGE_DIRECTORY_PATH);
         if (!directory.exists()) {
             directory.mkdirs();
         }
         for (int index = 0; index < multipartFiles.size(); index++) {
             final MultipartFile multipartImage = multipartFiles.get(index);
             String imageName = getCurrentTime() + "_" + multipartImage.getOriginalFilename();
-            multipartImage.transferTo(new File(IMAGE_DIRECTORY_PATH + imageName));
+            multipartImage.transferTo(new File(Image.IMAGE_DIRECTORY_PATH + imageName));
 
             Image resultImage;
-            if (index == THUMBNAIL_INDEX) {
-                resultImage = new Image(true, new ImagePath(IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
+            if (index == Image.THUMBNAIL_INDEX) {
+                resultImage = new Image(true, new ImagePath(Image.IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
             } else {
-                resultImage = new Image(new ImagePath(IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
+                resultImage = new Image(new ImagePath(Image.IMAGE_CONTROLLER_URL_PATH), new ImageName(imageName));
             }
             result.add(resultImage);
         }
