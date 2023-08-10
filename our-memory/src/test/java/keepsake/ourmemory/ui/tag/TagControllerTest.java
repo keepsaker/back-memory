@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,5 +35,11 @@ class TagControllerTest {
                         .content(jsonRequest)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void 멤버의_태그_조회에_성공하면_200을_반환한다() throws Exception {
+        mockMvc.perform(get("/tags/members/{memberId}", 1L))
+                .andExpect(status().isOk());
     }
 }
