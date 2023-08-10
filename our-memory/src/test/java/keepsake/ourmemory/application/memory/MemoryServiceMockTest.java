@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,9 +42,14 @@ class MemoryServiceMockTest {
         // given, when
         given(memoryRepository.save(ArgumentMatchers.any()))
                 .willReturn(new Memory(null, null, null, null, null, null));
-        given(imageHandler.upload(any()))
-                .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
-        MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of());
+        MemoryCreateRequest request = new MemoryCreateRequest(
+                "title",
+                Category.CAFE.getCategoryName(),
+                LocalDateTime.now(),
+                Star.TWO.getValue(),
+                "content",
+                Collections.emptyList()
+        );
 
         // then
         assertDoesNotThrow(() -> memoryService.createMemory(1L, request));
@@ -54,7 +60,7 @@ class MemoryServiceMockTest {
         // given, when
         given(imageHandler.upload(any()))
                 .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
-        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", List.of());
+        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -66,7 +72,7 @@ class MemoryServiceMockTest {
         // given, when
         given(imageHandler.upload(any()))
                 .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
-        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", List.of());
+        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", Collections.emptyList());
 
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
@@ -79,7 +85,7 @@ class MemoryServiceMockTest {
         given(imageHandler.upload(any()))
                 .willReturn(List.of(new Image(new ImagePath("path"), new ImageName("name"))));
         String overLengthTitle = "title".repeat(50);
-        MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of());
+        MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
 
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
