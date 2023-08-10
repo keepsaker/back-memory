@@ -28,4 +28,10 @@ public class TagController {
         List<TagFindResponseDto> tags = tagService.findTagsByMember(memberId);
         return ResponseEntity.ok(new TagFindResponse(tags));
     }
+
+    @DeleteMapping("tags/{tagId}")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long tagId) {
+        tagService.deleteTagById(tagId);
+        return ResponseEntity.noContent().build();
+    }
 }

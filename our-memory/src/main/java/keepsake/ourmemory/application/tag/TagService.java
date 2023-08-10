@@ -35,4 +35,8 @@ public class TagService {
                 .map(TagFindResponseDto::from)
                 .toList();
     }
+
+    public void deleteTagById(Long tagId) {
+        tagRepository.deleteById(tagId);
+    }
 }
