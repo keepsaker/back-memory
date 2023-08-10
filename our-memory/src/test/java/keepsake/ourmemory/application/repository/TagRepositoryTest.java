@@ -30,10 +30,28 @@ class TagRepositoryTest {
         tagRepository.save(tag3);
 
         // when
-        List<Tag> tagsByMember = tagRepository.findTagsByMemberId(memberId);
+        List<Tag> tagsByMember = tagRepository.findTagsByMemberIdAndDeletedIsFalse(memberId);
 
         // then
         assertThat(tagsByMember).usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .containsExactlyInAnyOrder(tag1, tag2);
+    }
+
+    @Test
+    void 멤버의_태그를_삭제한다() {
+        // given
+        Long memberId = 1L;
+        Tag tag1 = new Tag(memberId, new TagName("tagName1"), new TagColor("tagColor1"));
+        Tag tag2 = new Tag(memberId, new TagName("tagName2"), new TagColor("tagColor2"));
+
+        Tag savedTag1 = tagRepository.save(tag1);
+        Tag savedTag2 = tagRepository.save(tag2);
+
+        // when
+        tagRepository.deleteById(savedTag2.getId());
+        List<Tag> tagsByMember = tagRepository.findTagsByMemberIdAndDeletedIsFalse(memberId);
+        // then
+        assertThat(tagsByMember).usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+                .containsExactlyInAnyOrder(savedTag1);
     }
 }

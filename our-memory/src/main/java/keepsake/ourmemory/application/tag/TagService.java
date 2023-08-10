@@ -30,7 +30,7 @@ public class TagService {
 
     @Transactional(readOnly = true)
     public List<TagFindResponseDto> findTagsByMember(Long memberId) {
-        List<Tag> tags = tagRepository.findTagsByMemberId(memberId);
+        List<Tag> tags = tagRepository.findTagsByMemberIdAndDeletedIsFalse(memberId);
         return tags.stream()
                 .map(TagFindResponseDto::from)
                 .toList();
