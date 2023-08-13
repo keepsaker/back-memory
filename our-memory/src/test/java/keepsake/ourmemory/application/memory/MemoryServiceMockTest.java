@@ -58,7 +58,7 @@ class MemoryServiceMockTest {
     @Test
     void 존재하지_않는_카테고리_추억은_예외가_발생한다() throws IOException {
         // given, when
-        given(imageHandler.upload(any()))
+        given(imageHandler.saveAndConvert(any()))
                 .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
         // then
@@ -70,7 +70,7 @@ class MemoryServiceMockTest {
     @Test
     void 유효한_별점_범위를_벗어나면_예외가_발생한다() throws IOException {
         // given, when
-        given(imageHandler.upload(any()))
+        given(imageHandler.saveAndConvert(any()))
                 .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", Collections.emptyList());
 
@@ -82,7 +82,7 @@ class MemoryServiceMockTest {
     @Test
     void 추억의_머리말은_50자를_넘을_수_없다() throws IOException {
         // given, when
-        given(imageHandler.upload(any()))
+        given(imageHandler.saveAndConvert(any()))
                 .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         String overLengthTitle = "title".repeat(50);
         MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());

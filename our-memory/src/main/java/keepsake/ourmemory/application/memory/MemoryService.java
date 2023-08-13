@@ -33,7 +33,7 @@ public class MemoryService {
     private final ImageHandler imageHandler;
 
     public Long createMemory(Long memberId, MemoryCreateRequest request) throws IOException {
-        List<Image> images = imageHandler.upload(request.getImages());
+        List<Image> images = imageHandler.saveAndConvert(request.getImages());
         Title title = new Title(request.getTitle());
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());

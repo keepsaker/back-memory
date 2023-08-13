@@ -21,19 +21,18 @@ public class ImageHandler {
     @Value("${image.web-uri}")
     public String imageRootUri;
 
-    public List<Image> upload(List<MultipartFile> multipartFiles) throws IOException {
+    public List<Image> saveAndConvert(List<MultipartFile> multipartFiles) throws IOException {
         if (Objects.isNull(multipartFiles) || multipartFiles.isEmpty()) {
             return Collections.emptyList();
         }
         List<Image> result = new ArrayList<>();
-        System.out.println(imageRootPath);
 
         File directory = new File(imageRootPath);
         if (!directory.exists()) {
             directory.mkdirs();
         }
         for (int index = 0; index < multipartFiles.size(); index++) {
-            final MultipartFile multipartImage = multipartFiles.get(index);
+            MultipartFile multipartImage = multipartFiles.get(index);
             String imageName = getCurrentTime() + "_" + multipartImage.getOriginalFilename();
             multipartImage.transferTo(new File(imageRootPath + imageName));
 
