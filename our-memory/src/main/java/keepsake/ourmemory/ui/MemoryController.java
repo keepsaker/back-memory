@@ -4,13 +4,10 @@ import jakarta.validation.Valid;
 import keepsake.ourmemory.application.memory.MemoryService;
 import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.ui.dto.response.MemoriesResponse;
+import keepsake.ourmemory.ui.dto.response.SingleMemoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -30,5 +27,11 @@ public class MemoryController {
     public ResponseEntity<MemoriesResponse> getMemories() {
         MemoriesResponse responses = memoryService.getMemories(1L);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{memoryId}")
+    public ResponseEntity<SingleMemoryResponse> getMemory(@PathVariable Long memoryId) {
+        SingleMemoryResponse response = memoryService.getMemory(1L, memoryId);
+        return ResponseEntity.ok(response);
     }
 }
