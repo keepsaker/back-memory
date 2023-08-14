@@ -1,6 +1,10 @@
 package keepsake.ourmemory.application.memory;
 
 import keepsake.ourmemory.application.repository.MemoryRepository;
+import keepsake.ourmemory.domain.image.Image;
+import keepsake.ourmemory.domain.image.ImageHandler;
+import keepsake.ourmemory.domain.image.ImageName;
+import keepsake.ourmemory.domain.image.ImageRootPath;
 import keepsake.ourmemory.domain.memory.Category;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
@@ -12,7 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -25,26 +31,36 @@ class MemoryServiceMockTest {
 
     @Mock
     private MemoryRepository memoryRepository;
+    @Mock
+    private ImageHandler imageHandler;
 
     @InjectMocks
     private MemoryService memoryService;
 
     @Test
-    void 추억을_생성한다() {
+    void 추억을_생성한다() throws IOException {
         // given, when
         given(memoryRepository.save(ArgumentMatchers.any()))
                 .willReturn(new Memory(null, null, null, null, null, null));
-        MemoryCreateRequest request = new MemoryCreateRequest("title", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
+        MemoryCreateRequest request = new MemoryCreateRequest(
+                "title",
+                Category.CAFE.getCategoryName(),
+                LocalDateTime.now(),
+                Star.TWO.getValue(),
+                "content",
+                Collections.emptyList()
+        );
 
         // then
         assertDoesNotThrow(() -> memoryService.createMemory(1L, request));
     }
 
     @Test
-    void 존재하지_않는_카테고리_추억은_예외가_발생한다() {
+    void 존재하지_않는_카테고리_추억은_예외가_발생한다() throws IOException {
         // given, when
-        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
-
+        given(imageHandler.saveAndConvert(any()))
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
+        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -52,9 +68,11 @@ class MemoryServiceMockTest {
     }
 
     @Test
-    void 유효한_별점_범위를_벗어나면_예외가_발생한다() {
+    void 유효한_별점_범위를_벗어나면_예외가_발생한다() throws IOException {
         // given, when
-        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", List.of("image"));
+        given(imageHandler.saveAndConvert(any()))
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
+        MemoryCreateRequest request = new MemoryCreateRequest("title", "leo", LocalDateTime.now(), 6, "content", Collections.emptyList());
 
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))
@@ -62,10 +80,12 @@ class MemoryServiceMockTest {
     }
 
     @Test
-    void 추억의_머리말은_50자를_넘을_수_없다() {
+    void 추억의_머리말은_50자를_넘을_수_없다() throws IOException {
         // given, when
+        given(imageHandler.saveAndConvert(any()))
+                .willReturn(List.of(new Image(null, new ImageRootPath("path"), new ImageName("name"))));
         String overLengthTitle = "title".repeat(50);
-        MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", List.of("image"));
+        MemoryCreateRequest request = new MemoryCreateRequest(overLengthTitle, Category.RESTAURANT.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content", Collections.emptyList());
 
         // then
         assertThatThrownBy(() -> memoryService.createMemory(1L, request))

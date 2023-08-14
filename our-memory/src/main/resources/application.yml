@@ -12,6 +12,13 @@ spring:
         format_sql: true
         highlight_sql: true
         default_batch_fetch_size: 100 #최적화 옵션
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 20MB
+image:
+  directory-path: src/main/resources/static/images/
+  web-uri: localhost:8080/images/
 ---
 spring:
   config:
@@ -24,3 +31,5 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
+image:
+  web-uri: 43.201.45.102:8080/images/

@@ -1,6 +1,5 @@
 package keepsake.ourmemory.domain.image;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,32 +17,40 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
 
+    public static final int THUMBNAIL_INDEX = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long memoryId;
-
     private boolean thumbnail = false;
 
     @Embedded
-    private ImagePath imagePath;
+    private ImageRootUri imageRootUri;
+
+    @Embedded
+    private ImageRootPath imageRootPath;
 
     @Embedded
     private ImageName imageName;
 
-    public Image(Long memoryId, ImagePath imagePath, ImageName imageName) {
-        this.memoryId = memoryId;
-        this.imagePath = imagePath;
+    public Image(ImageRootUri imageRootUri, ImageRootPath imageRootPath, ImageName imageName) {
+        this(false, imageRootUri, imageRootPath, imageName);
+    }
+
+    public Image(boolean thumbnail, ImageRootUri imageRootUri, ImageRootPath imageRootPath, ImageName imageName) {
+        this.thumbnail = thumbnail;
+        this.imageRootUri = imageRootUri;
+        this.imageRootPath = imageRootPath;
         this.imageName = imageName;
     }
 
-    public Image(Long memoryId, boolean thumbnail, ImagePath imagePath, ImageName imageName) {
-        this.memoryId = memoryId;
-        this.thumbnail = thumbnail;
-        this.imagePath = imagePath;
-        this.imageName = imageName;
+    public String getOriginalUri() {
+        return imageRootUri.getImageUri() + imageName.getImageName();
+    }
+
+    public String getOriginalPath() {
+        return imageRootPath.getImagePath() + imageName.getImageName();
     }
 
     @Override
@@ -67,8 +74,9 @@ public class Image extends BaseEntity {
     public String toString() {
         return "Image{" +
                 "id=" + id +
-                ", memoryId=" + memoryId +
-                ", imagePath=" + imagePath +
+                ", thumbnail=" + thumbnail +
+                ", imageUri=" + imageRootUri +
+                ", imagePath=" + imageRootPath +
                 ", imageName=" + imageName +
                 '}';
     }

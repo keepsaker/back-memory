@@ -1,7 +1,16 @@
 package keepsake.ourmemory.domain.memory;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import keepsake.ourmemory.domain.BaseEntity;
+import keepsake.ourmemory.domain.image.Image;
 import keepsake.ourmemory.domain.tag.MemoryTag;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,12 +52,16 @@ public class Memory extends BaseEntity {
     @Enumerated(STRING)
     private MemoryStatus memoryStatus = MemoryStatus.PRIVATE;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "memory_id", nullable = false, updatable = false)
+    List<Image> images = new ArrayList<>();
+
     private boolean deleted = false;
 
     @Embedded
     private Coordinate coordinate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "memory_id", nullable = false, updatable = false)
     private List<MemoryTag> memoryTags = new ArrayList<>();
 
@@ -58,6 +71,7 @@ public class Memory extends BaseEntity {
                   LocalDateTime visitedAt,
                   Star star,
                   Content content,
+                  List<Image> images,
                   Coordinate coordinate) {
         this.memberId = memberId;
         this.title = title;
@@ -65,6 +79,7 @@ public class Memory extends BaseEntity {
         this.visitedAt = visitedAt;
         this.star = star;
         this.content = content;
+        this.images = images;
         this.coordinate = coordinate;
     }
 
@@ -75,19 +90,18 @@ public class Memory extends BaseEntity {
             LocalDateTime visitedAt,
             Star star,
             Content content) {
-        this(memberId, title, category, visitedAt, star, content, new Coordinate("NOT EXIST", "NOT EXIST"));
+        this(memberId, title, category, visitedAt, star, content, null, new Coordinate());
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-        final Memory memory = (Memory) other;
-        return Objects.equals(id, memory.id);
+    public Memory(
+            Long memberId,
+            Title title,
+            Category category,
+            LocalDateTime visitedAt,
+            Star star,
+            Content content,
+            List<Image> images) {
+        this(memberId, title, category, visitedAt, star, content, images, new Coordinate());
     }
 
     public String getTitleValue() {
@@ -108,6 +122,18 @@ public class Memory extends BaseEntity {
 
     public String getLongitudeValue() {
         return coordinate.getLongitude();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final Memory memory = (Memory) other;
+        return Objects.equals(id, memory.id);
     }
 
     @Override

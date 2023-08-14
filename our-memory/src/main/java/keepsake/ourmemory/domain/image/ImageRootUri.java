@@ -1,6 +1,5 @@
 package keepsake.ourmemory.domain.image;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,12 +10,11 @@ import java.util.Objects;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ImagePath {
-    @Column(nullable = false)
-    private String imagePath;
+public class ImageRootUri {
+    private String imageUri;
 
-    public ImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public ImageRootUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     @Override
@@ -27,19 +25,19 @@ public class ImagePath {
         if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        final ImagePath imagePath = (ImagePath) other;
-        return Objects.equals(this.imagePath, imagePath.imagePath);
+        ImageRootUri imageRootUri1 = (ImageRootUri) other;
+        return Objects.equals(imageUri, imageRootUri1.imageUri);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imagePath);
+        return Objects.hash(imageUri);
     }
 
     @Override
     public String toString() {
-        return "ImagePath{" +
-                "path='" + imagePath + '\'' +
+        return "ImageRootUri{" +
+                "imageUri='" + imageUri + '\'' +
                 '}';
     }
 }
