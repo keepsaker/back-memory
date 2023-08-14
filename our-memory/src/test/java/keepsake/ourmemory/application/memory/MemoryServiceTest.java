@@ -7,6 +7,7 @@ import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
 import keepsake.ourmemory.domain.memory.Title;
 import keepsake.ourmemory.ui.dto.response.MemoriesResponse;
+import keepsake.ourmemory.ui.dto.response.SingleMemoryResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,23 @@ public class MemoryServiceTest {
                 () -> assertThat(memories.memories().get(0).category()).isEqualTo("cafe"),
                 () -> assertThat(memories.memories().get(0).star()).isEqualTo(2),
                 () -> assertThat(memories.memories().get(0).visitedAt()).isNotNull()
+        );
+    }
+
+    @Test
+    @Transactional
+    void 하나의_추억을_조회한다() {
+        // given
+        MemoryCreateRequest request = new MemoryCreateRequest("title1", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content1", List.of("image"));
+        Long memoryId = memoryService.createMemory(1L, request);
+
+        // when
+        SingleMemoryResponse response = memoryService.getMemory(1L, memoryId);
+
+        // then
+        assertAll(
+                () -> assertThat(response.star()).isEqualTo(request.getStar()),
+                () -> assertThat(response.title()).isEqualTo(request.getTitle())
         );
     }
 }

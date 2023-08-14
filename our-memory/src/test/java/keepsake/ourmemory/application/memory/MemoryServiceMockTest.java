@@ -92,4 +92,15 @@ class MemoryServiceMockTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("제목은 최대 50자 입니다.");
     }
+
+    @Test
+    void 하나의_추억을_조회할_시_해당하는_추억이_없다면_예외를_더진다() {
+        // given
+        given(memoryRepository.findById(any()))
+                .willThrow(IllegalArgumentException.class);
+
+        // when, then
+        assertThatThrownBy(() -> memoryService.getMemory(1L, 1L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

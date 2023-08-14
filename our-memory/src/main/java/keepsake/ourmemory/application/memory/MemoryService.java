@@ -13,6 +13,7 @@ import keepsake.ourmemory.domain.memory.Title;
 import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.ui.dto.response.MemoriesResponse;
 import keepsake.ourmemory.ui.dto.response.MemoryResponse;
+import keepsake.ourmemory.ui.dto.response.SingleMemoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class MemoryService {
         Content content = new Content(request.getContent());
         Memory memory = getMemory(memberId, request, images, title, category, star, content);
         memoryRepository.save(memory);
+
         return memory.getId();
     }
 
@@ -67,5 +69,13 @@ public class MemoryService {
                 .toList();
 
         return new MemoriesResponse(responses);
+    }
+
+    @Transactional(readOnly = true)
+    public SingleMemoryResponse getMemory(Long memberId, Long memoryId) {
+        // TODO: 인가 필요
+        Memory memory = memoryRepository.findById(memoryId)
+                .orElseThrow(IllegalArgumentException::new);
+        return SingleMemoryResponse.from(memory);
     }
 }
