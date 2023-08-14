@@ -1,8 +1,5 @@
 package keepsake.ourmemory.application.memory;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.exif.GpsDirectory;
 import keepsake.ourmemory.application.memory.dto.CategoryDto;
 import keepsake.ourmemory.application.repository.MemoryRepository;
 import keepsake.ourmemory.domain.image.Image;
@@ -20,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -38,30 +34,23 @@ public class MemoryService {
         Category category = Category.from(request.getCategory());
         Star star = Star.from(request.getStar());
         Content content = new Content(request.getContent());
-        Memory memory;
-        if (images.isEmpty()) {
-            memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images);
-        } else {
-            Coordinate coordinate = extractCoordinate(images.get(0));
-            memory = new Memory(memberId, title, category, request.getVisitedAt(), star, content, images, coordinate);
-        }
+        Memory memory = getMemory(memberId, request, images, title, category, star, content);
         memoryRepository.save(memory);
         return memory.getId();
     }
 
-    private Coordinate extractCoordinate(final Image image) throws IOException {
-        File file = new File(image.getOriginalPath());
-        try {
-            GpsDirectory gpsDirectory = ImageMetadataReader.readMetadata(file).getFirstDirectoryOfType(GpsDirectory.class);
-            if (gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE)) {
-                String latitude = String.valueOf(gpsDirectory.getGeoLocation().getLatitude());
-                String longitude = String.valueOf(gpsDirectory.getGeoLocation().getLongitude());
-                return Coordinate.of(latitude, longitude);
-            }
-        } catch (ImageProcessingException e) {
-            throw new RuntimeException(e);
+    private Memory getMemory(Long memberId,
+                             MemoryCreateRequest request,
+                             List<Image> images,
+                             Title title,
+                             Category category,
+                             Star star,
+                             Content content) throws IOException {
+        if (images.isEmpty()) {
+            return new Memory(memberId, title, category, request.getVisitedAt(), star, content, images);
         }
-        return Coordinate.empty();
+        Coordinate coordinate = CoordinateExtractor.extractCoordinate(images.get(Image.THUMBNAIL_INDEX));
+        return new Memory(memberId, title, category, request.getVisitedAt(), star, content, images, coordinate);
     }
 
     public List<CategoryDto> findCategories() {
