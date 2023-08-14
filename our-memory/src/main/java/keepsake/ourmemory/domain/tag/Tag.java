@@ -1,20 +1,17 @@
 package keepsake.ourmemory.domain.tag;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import keepsake.ourmemory.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.Objects;
 
 @Entity
 @Getter
+@SQLDelete(sql = "UPDATE tag SET deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag extends BaseEntity {
     @Id
@@ -29,6 +26,9 @@ public class Tag extends BaseEntity {
 
     @Embedded
     private TagColor tagColor;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     public Tag(Long memberId, TagName tagName, TagColor tagColor) {
         this.memberId = memberId;
