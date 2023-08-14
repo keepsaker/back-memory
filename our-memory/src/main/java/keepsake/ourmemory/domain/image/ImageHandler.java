@@ -16,7 +16,7 @@ import java.util.Objects;
 @Component
 public class ImageHandler {
     @Value("${image.directory-path}")
-    public String imageRootPath;
+    public String imageRelativePath;
 
     @Value("${image.web-uri}")
     public String imageRootUri;
@@ -26,21 +26,22 @@ public class ImageHandler {
             return Collections.emptyList();
         }
         List<Image> result = new ArrayList<>();
-
-        File directory = new File(imageRootPath);
+        String absolutePath = new File(imageRelativePath).getAbsolutePath();
+        File directory = new File(absolutePath);
         if (!directory.exists()) {
             directory.mkdirs();
         }
         for (int index = 0; index < multipartFiles.size(); index++) {
             MultipartFile multipartImage = multipartFiles.get(index);
             String imageName = getCurrentTime() + "_" + multipartImage.getOriginalFilename();
-            multipartImage.transferTo(new File(imageRootPath + imageName));
+
+            multipartImage.transferTo(new File(absolutePath + "/" + imageName));
 
             Image resultImage;
             if (index == Image.THUMBNAIL_INDEX) {
-                resultImage = new Image(true, new ImageRootUri(imageRootUri), new ImageRootPath(imageRootPath), new ImageName(imageName));
+                resultImage = new Image(true, new ImageRootUri(imageRootUri), new ImageRootPath(imageRelativePath), new ImageName(imageName));
             } else {
-                resultImage = new Image(new ImageRootUri(imageRootUri), new ImageRootPath(imageRootPath), new ImageName(imageName));
+                resultImage = new Image(new ImageRootUri(imageRootUri), new ImageRootPath(imageRelativePath), new ImageName(imageName));
             }
             result.add(resultImage);
         }

@@ -17,7 +17,7 @@ spring:
       maxFileSize: 10MB
       maxRequestSize: 20MB
 image:
-  directory-path: /Users/jhs/jhs/woo/project/keepsaker/our-memory/src/main/java/keepsake/ourmemory/images/
+  directory-path: src/main/resources/static/images/
   web-uri: localhost:8080/images/
 ---
 spring:
@@ -32,5 +32,4 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
 image:
-  directory-path: /home/ubuntu/images/
-  web-uri: 43.201.45.102/images/
+  web-uri: 43.201.45.102:8080/images/

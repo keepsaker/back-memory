@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -64,7 +65,7 @@ public class MemoryAcceptanceTest {
     @Test
     void 하나의_추억을_조회한다() {
         // given
-        MemoryCreateRequest request = new MemoryCreateRequest("title1", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content1", List.of("image"));
+        MemoryCreateRequest request = new MemoryCreateRequest("title1", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content1", Collections.emptyList());
         Long memoryId = 추억을_추가한다(request);
 
         // when

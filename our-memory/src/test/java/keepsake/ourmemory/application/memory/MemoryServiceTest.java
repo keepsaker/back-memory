@@ -6,6 +6,7 @@ import keepsake.ourmemory.domain.memory.Content;
 import keepsake.ourmemory.domain.memory.Memory;
 import keepsake.ourmemory.domain.memory.Star;
 import keepsake.ourmemory.domain.memory.Title;
+import keepsake.ourmemory.ui.dto.request.MemoryCreateRequest;
 import keepsake.ourmemory.ui.dto.response.MemoriesResponse;
 import keepsake.ourmemory.ui.dto.response.SingleMemoryResponse;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -50,9 +53,9 @@ public class MemoryServiceTest {
 
     @Test
     @Transactional
-    void 하나의_추억을_조회한다() {
+    void 하나의_추억을_조회한다() throws IOException {
         // given
-        MemoryCreateRequest request = new MemoryCreateRequest("title1", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content1", List.of("image"));
+        MemoryCreateRequest request = new MemoryCreateRequest("title1", Category.CAFE.getCategoryName(), LocalDateTime.now(), Star.TWO.getValue(), "content1", Collections.emptyList());
         Long memoryId = memoryService.createMemory(1L, request);
 
         // when

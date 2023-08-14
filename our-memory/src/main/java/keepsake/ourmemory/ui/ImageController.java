@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,12 +18,13 @@ import java.nio.file.Paths;
 @RestController
 public class ImageController {
     @Value("${image.directory-path}")
-    public String imageRootPath;
+    public String imageReletivePath;
 
     @GetMapping("/images/{imageName:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         try {
-            Path filePath = Paths.get(imageRootPath + imageName);
+            String absolutePath = new File(imageReletivePath).getAbsolutePath();
+            Path filePath = Paths.get(absolutePath + "/" + imageName);
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 String contentType = "image/jpeg"; // 이미지의 타입을 알맞게 설정해 주세요.
