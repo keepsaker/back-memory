@@ -32,7 +32,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e) {
         log.error("error from handleUnexpectedException = ", e);
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return ResponseEntity.internalServerError().body(errorResponse);
+        ErrorResponse errorResponse = new ErrorResponse("서버에서 예상치 못한 문제가 발생했습니다.");
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
     }
 }
