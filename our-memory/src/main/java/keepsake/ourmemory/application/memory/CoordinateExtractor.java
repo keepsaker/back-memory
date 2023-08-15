@@ -24,7 +24,7 @@ public class CoordinateExtractor {
                 return Coordinate.of(latitude, longitude);
             }
         } catch (ImageProcessingException e) {
-            throw new RuntimeException(e);
+            return Coordinate.empty();
         }
         return Coordinate.empty();
     }

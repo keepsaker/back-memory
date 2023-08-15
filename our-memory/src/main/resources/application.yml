@@ -1,10 +1,8 @@
-spring:
-  datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-  h2:
-    console:
-      enabled: true
+spring: # 전체 공통 설정
+  profiles:
+    active: dev # 기본 프로파일을 dev로 설정
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
@@ -16,11 +14,21 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 20MB
+---
+spring: # dev 프로파일에만 적용할 설정
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+  h2:
+    console:
+      enabled: true
 image:
   directory-path: src/main/resources/static/images/
   web-uri: localhost:8080/images/
 ---
-spring:
+spring: # prod 프로파일에만 적용할 설정
   config:
     activate:
       on-profile: prod
